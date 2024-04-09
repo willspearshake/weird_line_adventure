@@ -93,7 +93,8 @@ pub fn main() {
 
     //color_buffer = draw_rectangle(color_buffer, 100, 100, 500, 240, Color { r: 255, g: 0, b: 0, a: 255 });
 
-    let mut x = 0;
+    let mut x = 10;
+    let mut y = 10;
 
     'running: loop {
         if !process_event(&sdl_context) {
@@ -101,14 +102,21 @@ pub fn main() {
         }
         //i = (i + 1) % 69;
         //color_buffer = clear_color_buffer(color_buffer, Color { r: 255 - i, g: 255, b: 69 - i, a: 0 });
-        color_buffer = draw_pixel(color_buffer, x, x, Color { r: 0, g: 0, b: 0, a: 255 });
+        color_buffer = draw_pixel(color_buffer, x, y, Color { r: 0, g: 0, b: 0, a: 255 });
         color_buffer_texture.update(
             None,
                 &color_buffer,
                 (WINDOW_WIDTH * 4) as usize
             ).unwrap();
         render(&mut canvas, &mut color_buffer_texture);
-        x = x + 1;
+        if x <= WINDOW_WIDTH - 10 {
+            x = x + 1;
+        }
+        else {
+            x = 10;
+            y = y + 10;
+        }
+
       
     }
 }
