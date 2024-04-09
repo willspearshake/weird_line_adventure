@@ -102,6 +102,7 @@ pub fn main() {
         }
         //i = (i + 1) % 69;
         //color_buffer = clear_color_buffer(color_buffer, Color { r: 255 - i, g: 255, b: 69 - i, a: 0 });
+        color_buffer = draw_line(color_buffer, 100, 100, 100, 1000, Color { r: 0, g: 0, b: 0, a: 255 });
         color_buffer = draw_pixel(color_buffer, x, y, Color { r: 0, g: 0, b: 0, a: 255 });
         color_buffer_texture.update(
             None,

@@ -56,3 +56,27 @@ pub fn draw_rectangle(mut color_buffer: Vec<u8>, x: usize, y: usize, w: usize, h
     }
   color_buffer
 }
+
+pub fn draw_line(mut color_buffer: Vec<u8>, x1: usize, y1: usize, x2: usize, y2: usize, color: Color) -> Vec<u8> {
+
+  let xdif = x2-x1;
+  let ydif = y2-y1;
+
+  let m = ydif / xdif;
+
+  let d =  ((ydif.pow(2) + xdif.pow(2)) as f64).sqrt() as usize;
+
+
+  for i in 0..d{
+        let current_x = (x1 + i);
+        let current_y = (x1 + i)*m;
+        color_buffer = draw_pixel(color_buffer, current_x, current_y, color);
+    }
+  color_buffer
+}
+
+/*Compute the slope as a = (y2-y1) / (x2-x1).
+Compute the intercept as b = y1 - a × x1.
+The equation you need reads y = a × x + b, with a an b computed as above.
+If x2 = x1, you cannot compute a — the line is vertical and has equation x = x1.
+*/
