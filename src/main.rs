@@ -4,12 +4,9 @@ use sdl2::pixels::Color;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::render::Canvas;
-use sdl2::render::TextureAccess;
 use sdl2::pixels::PixelFormatEnum;
-use sdl2::rect::Rect;
 use sdl2::render::Texture;
 use sdl2::render::TextureCreator;
-use sdl2::video::Window;
 use sdl2::video::WindowContext;
 use core::time::Duration;
 
@@ -66,7 +63,7 @@ pub fn initialize_texture(texture_creator: &TextureCreator<WindowContext>) -> Te
 pub fn render(canvas: &mut Canvas<sdl2::video::Window>, color_buffer_texture: &mut Texture) {
 
     canvas.clear();
-    canvas.copy(&color_buffer_texture, None, None).unwrap();
+    canvas.copy(color_buffer_texture, None, None).unwrap();
     canvas.present();
     ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
 
@@ -102,20 +99,19 @@ pub fn main() {
         }
         //i = (i + 1) % 69;
         //color_buffer = clear_color_buffer(color_buffer, Color { r: 255 - i, g: 255, b: 69 - i, a: 0 });
-        color_buffer = draw_line(color_buffer, 100, 100, 100, 1000, Color { r: 0, g: 0, b: 0, a: 255 });
         color_buffer = draw_pixel(color_buffer, x, y, Color { r: 0, g: 0, b: 0, a: 255 });
         color_buffer_texture.update(
             None,
                 &color_buffer,
-                (WINDOW_WIDTH * 4) as usize
+                WINDOW_WIDTH * 4
             ).unwrap();
         render(&mut canvas, &mut color_buffer_texture);
         if x <= WINDOW_WIDTH - 10 {
-            x = x + 1;
+            x += 1;
         }
         else {
             x = 10;
-            y = y + 10;
+            y += 10;
         }
 
       
