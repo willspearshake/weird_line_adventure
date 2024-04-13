@@ -57,9 +57,6 @@ pub fn initialize_texture(texture_creator: &TextureCreator<WindowContext>) -> Te
 }
 
 
-
-
-
 pub fn render(canvas: &mut Canvas<sdl2::video::Window>, color_buffer_texture: &mut Texture) {
 
     canvas.clear();
@@ -78,7 +75,13 @@ pub fn main() {
     let mut canvas = window.into_canvas().present_vsync().build().unwrap();
 
 
-    let mut color_buffer = vec![0; WINDOW_WIDTH * WINDOW_HEIGHT * 4];
+    let mut color_buffer = ColorBuffer {
+        buffer: vec![0; WINDOW_WIDTH * WINDOW_HEIGHT * 4],
+        height: WINDOW_HEIGHT,
+        width: WINDOW_WIDTH
+      };
+    
+    
     
     let texture_creator = canvas.texture_creator();
 
@@ -102,7 +105,7 @@ pub fn main() {
         color_buffer = draw_pixel(color_buffer, x, y, Color { r: 0, g: 0, b: 0, a: 255 });
         color_buffer_texture.update(
             None,
-                &color_buffer,
+                &color_buffer.buffer,
                 WINDOW_WIDTH * 4
             ).unwrap();
         render(&mut canvas, &mut color_buffer_texture);

@@ -1,19 +1,29 @@
 use sdl2::pixels::Color;
 
-static WINDOW_WIDTH: usize = 800;
-static WINDOW_HEIGHT: usize = 600;
+pub struct ColorBuffer {
+  pub buffer: Vec<u8>,
+  pub height: usize,
+  pub width: usize
+}
+
+impl ColorBuffer {
+  pub fn set_pixel_color(&mut self, x: usize, y: usize, color: Color) {
+    if x < self.width && y < self.height {
+          let i = 4 * self.width * y + x*4;
+          self.buffer[i] = color.b;
+          self.buffer[i + 1] = color.g;
+          self.buffer[i + 2] = color.r;
+          self.buffer[i + 3] = color.a;
+    }
+  }
+}
 
 
+pub fn clear_color_buffer(mut color_buffer: ColorBuffer, color: Color) -> ColorBuffer {
 
-pub fn clear_color_buffer(mut color_buffer: Vec<u8>,color: Color) -> Vec<u8> {
-
-    for y in 0..WINDOW_HEIGHT {
-		for x in 0..WINDOW_WIDTH {
-                let i = 4 * WINDOW_WIDTH * y + x*4;
-                color_buffer[i] = color.b;
-                color_buffer[i + 1] = color.g;
-                color_buffer[i + 2] = color.r;
-                color_buffer[i + 3] = color.a;
+    for y in 0..color_buffer.height {
+		for x in 0..color_buffer.width {
+                color_buffer.set_pixel_color(x, y, color);
             }
 		}
     color_buffer
@@ -21,37 +31,29 @@ pub fn clear_color_buffer(mut color_buffer: Vec<u8>,color: Color) -> Vec<u8> {
     
 // BGRA32
 
-pub fn draw_pixel(mut color_buffer: Vec<u8>, x: usize, y: usize, color: Color) -> Vec<u8> {
-	if x < WINDOW_WIDTH && y < WINDOW_HEIGHT {
-        let i = 4 * WINDOW_WIDTH * y + x*4;
-        color_buffer[i] = color.b;
-        color_buffer[i + 1] = color.g;
-        color_buffer[i + 2] = color.r;
-        color_buffer[i + 3] = color.a;
+pub fn draw_pixel(mut color_buffer: ColorBuffer, x: usize, y: usize, color: Color) -> ColorBuffer {
+	if x < color_buffer.width && y < color_buffer.height {
+    color_buffer.set_pixel_color(x, y, color);
 	}
     color_buffer
 }
 
-pub fn draw_grid(mut color_buffer: Vec<u8>, color: Color) -> Vec<u8> {
+pub fn draw_grid(mut color_buffer: ColorBuffer, color: Color) -> ColorBuffer {
 
-    for y in (0..WINDOW_HEIGHT).step_by(10) {
-      for x in (0..WINDOW_WIDTH).step_by(10) {
-                  let i =  4 * WINDOW_WIDTH * y + x*4;
-                  color_buffer[i] = color.b;
-                  color_buffer[i + 1] = color.g;
-                  color_buffer[i + 2] = color.r;
-                  color_buffer[i + 3] = color.a;
-              }
-      }
+    for y in (0..color_buffer.height).step_by(10) {
+      for x in (0..color_buffer.width).step_by(10) {
+        color_buffer.set_pixel_color(x, y, color);
+        }
+    }
     color_buffer
 }
 
-pub fn draw_rectangle(mut color_buffer: Vec<u8>, x: usize, y: usize, w: usize, h: usize, color: Color) -> Vec<u8> {
+pub fn draw_rectangle(mut color_buffer: ColorBuffer, x: usize, y: usize, w: usize, h: usize, color: Color) -> ColorBuffer {
   for i in 0..h{
     for j in 0..w {
         let current_x = x + i;
         let current_y = y + j;
-        color_buffer = draw_pixel(color_buffer, current_x, current_y, color);
+        color_buffer.set_pixel_color(current_x, current_y, color);
       }
     }
   color_buffer
