@@ -1,0 +1,1 @@
+A small graphic project for experimenting with SDL2 Rust bindings
